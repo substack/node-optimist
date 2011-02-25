@@ -126,11 +126,9 @@ demand_count.js:
 	$ ./demand_count.js a
 	Not enough arguments, expected 2, but only found 1
 	$ ./demand_count.js a b
-	{ _: [ 'a', 'b' ],
-  	  '$0': 'node ./examples/demand_count.js' }
+	{ _: [ 'a', 'b' ], '$0': 'node ./demand_count.js' }
 	$ ./demand_count.js a b c
-	{ _: [ 'a', 'b', 'c' ],
-	  '$0': 'node ./examples/demand_count.js' }
+	{ _: [ 'a', 'b', 'c' ], '$0': 'node ./demand_count.js' }
 
 EVEN MORE HOLY COW
 ------------------
