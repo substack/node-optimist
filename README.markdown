@@ -111,6 +111,27 @@ divide.js:
     Usage: ./divide.js -x [num] -y [num]
     Missing arguments: y
 
+Then demand some non-hypenated arguments!
+-----------------------------------------
+
+demand_count.js:
+	#!/usr/bin/env node
+	var argv = require('optimist')
+		.demandCount(2)
+		.argv;
+	console.dir(argv)
+
+***
+
+	$ ./demand_count.js a
+	Not enough arguments, expected 2, but only found 1
+	$ ./demand_count.js a b
+	{ _: [ 'a', 'b' ],
+  	  '$0': 'node ./examples/demand_count.js' }
+	$ ./demand_count.js a b c
+	{ _: [ 'a', 'b', 'c' ],
+	  '$0': 'node ./examples/demand_count.js' }
+
 EVEN MORE HOLY COW
 ------------------
 
