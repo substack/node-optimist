@@ -9,7 +9,7 @@
         "example" : "examples"
     },
     "dependencies" : {
-        "wordwrap" : ">=0.0.1 <0.1"
+        "wordwrap" : "~>0.0"
     },
     "devDependencies" : {
         "hashish": "0.0.x",
