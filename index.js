@@ -411,9 +411,13 @@ function Argv (args, cwd) {
         }
         
         checks.forEach(function (f) {
+            var result;
             try {
-                if (f(argv) === false) {
+                result = f(argv);
+                if (result === false) {
                     fail('Argument check failed: ' + f.toString());
+                } else if (typeof result === 'string') {
+                    fail(result);
                 }
             }
             catch (err) {

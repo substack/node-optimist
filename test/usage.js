@@ -89,6 +89,34 @@ exports.checkFail = function () {
     assert.ok(r.exit);
 };
 
+exports.checkFailReturn = function () {
+    var r = checkUsage(function () {
+        return optimist('-x 10 -z 20'.split(' '))
+            .usage('Usage: $0 -x NUM -y NUM')
+            .check(function (argv) {
+                if (!('x' in argv)) return 'You forgot about -x';
+                if (!('y' in argv)) return 'You forgot about -y';
+            })
+            .argv;
+    });
+
+    assert.deepEqual(
+        r.result,
+        { x : 10, z : 20, _ : [], $0 : './usage' }
+    );
+
+    assert.deepEqual(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage -x NUM -y NUM',
+            'You forgot about -y'
+        ]
+    );
+
+    assert.deepEqual(r.logs, []);
+    assert.ok(r.exit);
+};
+
 exports.checkCondPass = function () {
     function checker (argv) {
         return 'x' in argv && 'y' in argv;
