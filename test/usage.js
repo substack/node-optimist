@@ -210,6 +210,20 @@ exports.defaultHash = function () {
     });
 };
 
+exports.demandZero = function () {
+    var r = checkUsage(function () {
+        return optimist(['-x', '0'])
+            .demand(['x'])
+            .argv;
+    });
+    assert.deepEqual(r, {
+        result : { x : 0, _ : [], $0 : './usage' },
+        errors : [],
+        logs : [],
+        exit : false,
+    });
+};
+
 exports.rebase = function () {
     assert.equal(
         optimist.rebase('/home/substack', '/home/substack/foo/bar/baz'),
