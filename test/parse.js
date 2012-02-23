@@ -6,10 +6,7 @@ var localExpresso = path.normalize(
     __dirname + '/../node_modules/.bin/expresso'
 );
 
-var expresso = process.argv[1] === localExpresso
-    ? 'node ./node_modules/.bin/expresso'
-    : 'expresso'
-;
+var expresso = process.argv[1];
 
 exports['short boolean'] = function () {
     var parse = optimist.parse([ '-b' ]);
@@ -268,6 +265,16 @@ exports.alias = function () {
     assert.equal(argv.zoom, 55);
     assert.equal(argv.z, argv.zoom);
     assert.equal(argv.f, 11);
+};
+
+exports.booleanAlias = function () {
+    var argv = optimist(['--zoom', 'stuff'])
+        .boolean('z')
+        .alias('z', 'zoom')
+        .argv
+    ;
+    assert.equal(argv.zoom, true);
+    assert.deepEqual(argv._, ['stuff']);
 };
 
 exports.multiAlias = function () {

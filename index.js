@@ -39,6 +39,21 @@ function Argv (args, cwd) {
     
     var flags = { bools : {}, strings : {} };
     
+    var syncBooleanAliases = function () {
+      for (var bool in flags.bools) {
+        var boolAliases = aliases[bool];
+        if (boolAliases) {
+          boolAliases.forEach(function (alias) {
+            flags.bools[alias] = true;
+          });
+        }
+      }
+    };
+    
+    var prepareFlags = function () {
+      syncBooleanAliases();
+    };
+    
     self.boolean = function (bools) {
         if (!Array.isArray(bools)) {
             bools = [].slice.call(arguments);
@@ -303,6 +318,8 @@ function Argv (args, cwd) {
     });
     
     function parseArgs () {
+        prepareFlags();
+      
         var argv = { _ : [], $0 : self.$0 };
         Object.keys(flags.bools).forEach(function (key) {
             setArg(key, defaults[key] || false);
