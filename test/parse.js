@@ -18,7 +18,7 @@ test('long boolean', function (t) {
     );
     t.end();
 });
-    
+
 test('bare', function (t) {
     t.same(
         optimist.parse([ 'foo', 'bar', 'baz' ]),
@@ -42,7 +42,7 @@ test('short group next', function (t) {
     );
     t.end();
 });
- 
+
 test('short capture', function (t) {
     t.same(
         optimist.parse([ '-h', 'localhost' ]),
@@ -101,7 +101,7 @@ test('mixed short bool and capture', function (t) {
     );
     t.end();
 });
- 
+
 test('short and long', function (t) {
     t.same(
         optimist.parse([ '-h', 'localhost', '-fp', '555', 'script.js' ]),
@@ -120,7 +120,7 @@ test('no', function (t) {
     );
     t.end();
 });
- 
+
 test('multi', function (t) {
     t.same(
         optimist.parse([ '-v', 'a', '-v', 'b', '-v', 'c' ]),
@@ -128,7 +128,7 @@ test('multi', function (t) {
     );
     t.end();
 });
- 
+
 test('comprehensive', function (t) {
     t.same(
         optimist.parse([
@@ -194,14 +194,14 @@ test('flag boolean', function (t) {
 test('flag boolean value', function (t) {
     var parse = optimist(['--verbose', 'false', 'moo', '-t', 'true'])
         .boolean(['t', 'verbose']).default('verbose', true).argv;
-    
+
     t.same(parse, {
         verbose: false,
         t: true,
         _: ['moo'],
         $0 : expresso
     });
-    
+
     t.same(typeof parse.verbose, 'boolean');
     t.same(typeof parse.t, 'boolean');
     t.end();
@@ -212,14 +212,14 @@ test('flag boolean default false', function (t) {
         .boolean(['t', 'verbose'])
         .default('verbose', false)
         .default('t', false).argv;
-    
+
     t.same(parse, {
         verbose: false,
         t: false,
         _: ['moo'],
         $0 : expresso
     });
-    
+
     t.same(typeof parse.verbose, 'boolean');
     t.same(typeof parse.t, 'boolean');
     t.end();
@@ -229,7 +229,7 @@ test('flag boolean default false', function (t) {
 test('boolean groups', function (t) {
     var parse = optimist([ '-x', '-z', 'one', 'two', 'three' ])
         .boolean(['x','y','z']).argv;
-    
+
     t.same(parse, {
         x : true,
         y : false,
@@ -237,7 +237,7 @@ test('boolean groups', function (t) {
         _ : [ 'one', 'two', 'three' ],
         $0 : expresso
     });
-    
+
     t.same(typeof parse.x, 'boolean');
     t.same(typeof parse.y, 'boolean');
     t.same(typeof parse.z, 'boolean');
@@ -248,7 +248,7 @@ test('strings' , function (t) {
     var s = optimist([ '-s', '0001234' ]).string('s').argv.s;
     t.same(s, '0001234');
     t.same(typeof s, 'string');
-    
+
     var x = optimist([ '-x', '56' ]).string('x').argv.x;
     t.same(x, '56');
     t.same(typeof x, 'string');
@@ -307,7 +307,7 @@ test('boolean default true', function (t) {
             default: true
         }
     }).argv;
-  
+
     t.equal(argv.sometrue, true);
     t.end();
 });
@@ -330,7 +330,7 @@ test('nested dotted objects', function (t) {
         '--foo.quux.quibble', '5', '--foo.quux.o_O',
         '--beep.boop'
     ]).argv;
-    
+
     t.same(argv.foo, {
         bar : 3,
         baz : 4,
@@ -365,7 +365,7 @@ test('boolean and alias with chainable api', function (t) {
     };
 
     t.same(aliasedArgv, expected);
-    t.same(propertyArgv, expected); 
+    t.same(propertyArgv, expected);
     t.end();
 });
 
