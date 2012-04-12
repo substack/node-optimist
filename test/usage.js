@@ -13,7 +13,7 @@ test('usageFail', function (t) {
         r.result,
         { x : 10, z : 20, _ : [], $0 : './usage' }
     );
-    
+
     t.same(
         r.errors.join('\n').split(/\n+/),
         [
@@ -75,12 +75,12 @@ test('checkFail', function (t) {
             })
             .argv;
     });
-    
+
     t.same(
         r.result,
         { x : 10, z : 20, _ : [], $0 : './usage' }
     );
-    
+
     t.same(
         r.errors.join('\n').split(/\n+/),
         [
@@ -88,7 +88,7 @@ test('checkFail', function (t) {
             'You forgot about -y'
         ]
     );
-    
+
     t.same(r.logs, []);
     t.ok(r.exit);
     t.end();
@@ -98,7 +98,7 @@ test('checkCondPass', function (t) {
     function checker (argv) {
         return 'x' in argv && 'y' in argv;
     }
-    
+
     var r = checkUsage(function () {
         return optimist('-x 10 -y 20'.split(' '))
             .usage('Usage: $0 -x NUM -y NUM')
@@ -118,25 +118,25 @@ test('checkCondFail', function (t) {
     function checker (argv) {
         return 'x' in argv && 'y' in argv;
     }
-    
+
     var r = checkUsage(function () {
         return optimist('-x 10 -z 20'.split(' '))
             .usage('Usage: $0 -x NUM -y NUM')
             .check(checker)
             .argv;
     });
-    
+
     t.same(
         r.result,
         { x : 10, z : 20, _ : [], $0 : './usage' }
     );
-    
+
     t.same(
         r.errors.join('\n').split(/\n+/).join('\n'),
         'Usage: ./usage -x NUM -y NUM\n'
         + 'Argument check failed: ' + checker.toString()
     );
-    
+
     t.same(r.logs, []);
     t.ok(r.exit);
     t.end();
@@ -169,7 +169,7 @@ test('countFail', function (t) {
         r.result,
         { _ : [ '1', '2' ], moo : true, $0 : './usage' }
     );
-    
+
     t.same(
         r.errors.join('\n').split(/\n+/),
         [
@@ -177,7 +177,7 @@ test('countFail', function (t) {
             'Not enough non-option arguments: got 2, need at least 3',
         ]
     );
-    
+
     t.same(r.logs, []);
     t.ok(r.exit);
     t.end();
@@ -248,24 +248,24 @@ function checkUsage (f) {
     process.exit = function (t) { exit = true };
     process.env = Hash.merge(process.env, { _ : 'node' });
     process.argv = [ './usage' ];
-    
+
     var errors = [];
     var logs = [];
-    
+
     console._error = console.error;
     console.error = function (msg) { errors.push(msg) };
     console._log = console.log;
     console.log = function (msg) { logs.push(msg) };
-    
+
     var result = f();
-    
+
     process.exit = process._exit;
     process.env = process._env;
     process.argv = process._argv;
 
     console.error = console._error;
     console.log = console._log;
-    
+
     return {
         errors : errors,
         logs : logs,
