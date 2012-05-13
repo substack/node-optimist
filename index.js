@@ -156,10 +156,7 @@ function Argv (args, cwd) {
         }
         return self;
     };
-
-    // Usage
-    // .protect("p")
-    // .protect("p", "Enter Password:")
+    
     var protecting = false;
     self.protect = function (key, prompt) {
         protecting = {
@@ -441,7 +438,6 @@ function Argv (args, cwd) {
         });
 
         if (protecting) {
-
             argv._io = new events.EventEmitter();
             if (argv[protecting.name]) {
                 var buffer = '';
