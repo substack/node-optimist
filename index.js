@@ -2,7 +2,6 @@ var path = require('path');
 var wordwrap = require('wordwrap');
 var tty = require('tty');
 var events = require('events');
-var _ = require('underscore');
 
 /*  Hack an instance of Argv with process.argv into Argv
     so people can do
@@ -441,27 +440,28 @@ function Argv (args, cwd) {
             }
         });
 
-        _.extend(argv, new events.EventEmitter());
+        if (protecting) {
 
-        if (protecting && argv[protecting.name]) {
-            var buffer = '';
+            argv._io = new events.EventEmitter();
+            if (argv[protecting.name]) {
+                var buffer = '';
 
-            console.log(protecting.prompt || '');
-            process.stdin.resume();
-            tty.setRawMode(true);
+                console.log(protecting.prompt || '');
+                process.stdin.resume();
+                tty.setRawMode(true);
 
-            process.stdin.on('keypress', function(chr, key){
-                if (key && 'enter' === key.name) {
-                    process.stdin.removeAllListeners('keypress');
-                    tty.setRawMode(false);
-                    process.stdin.pause();
-                    argv[protecting.name] = buffer;
-
-                    argv.emit('input', argv, protecting.name);
-                    return;
-                }
-                buffer += chr;
-            });
+                process.stdin.on('keypress', function(chr, key){
+                    if (key && 'enter' === key.name) {
+                        process.stdin.removeAllListeners('keypress');
+                        tty.setRawMode(false);
+                        process.stdin.pause();
+                        argv[protecting.name] = buffer;
+                        argv._io.emit('input', argv, protecting.name);
+                        return;
+                    }
+                    buffer += chr;
+                });
+            }
         }
         
         return argv;
