@@ -1,5 +1,8 @@
 var path = require('path');
 var wordwrap = require('wordwrap');
+var tty = require('tty');
+var events = require('events');
+var _ = require('underscore');
 
 /*  Hack an instance of Argv with process.argv into Argv
     so people can do
@@ -152,6 +155,18 @@ function Argv (args, cwd) {
         else {
             descriptions[key] = desc;
         }
+        return self;
+    };
+
+    // Usage
+    // .protect("p")
+    // .protect("p", "Enter Password:")
+    var protecting = false;
+    self.protect = function (key, prompt) {
+        protecting = {
+            name: key,
+            prompt: prompt || false
+        };
         return self;
     };
     
@@ -425,6 +440,29 @@ function Argv (args, cwd) {
                 fail(err)
             }
         });
+
+        _.extend(argv, new events.EventEmitter());
+
+        if (protecting && argv[protecting.name]) {
+            var buffer = '';
+
+            console.log(protecting.prompt || '');
+            process.stdin.resume();
+            tty.setRawMode(true);
+
+            process.stdin.on('keypress', function(chr, key){
+                if (key && 'enter' === key.name) {
+                    process.stdin.removeAllListeners('keypress');
+                    tty.setRawMode(false);
+                    process.stdin.pause();
+                    argv[protecting.name] = buffer;
+
+                    argv.emit('input', argv, protecting.name);
+                    return;
+                }
+                buffer += chr;
+            });
+        }
         
         return argv;
     }

@@ -7,8 +7,8 @@
 // is masked or hidden all together.  Using the `protect` option 
 // allows you to do just this.
 
-var argv = require('../index')
-	.protect('p', 'Enter Password:')
+var argv = require('optimist')
+    .protect('p', 'Enter Password:')
     .demand('u')
     .alias('u', 'username')
     .alias('p', 'password')
