@@ -7,8 +7,8 @@
 // is masked or hidden all together.  Using the `protect` option 
 // allows you to do just this.
 
-var argv = require('../index')
-	.protect('p', 'Enter Password:')
+var argv = require('optimist')
+    .protect('p', 'Enter Password:')
     .demand('u')
     .alias('u', 'username')
     .alias('p', 'password')
@@ -18,6 +18,6 @@ var argv = require('../index')
 // due to the fact that we must wait for user input.  Instead of "blocking", 
 // this library takes the more typical node methodology of using "events".
 argv.on('input', function(argv) {
-	console.log('Username: ' + argv.u);
-	console.log('Password: ' + argv.p);
+    console.log('Username: ' + argv.u);
+    console.log('Password: ' + argv.p);
 });
