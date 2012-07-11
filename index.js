@@ -195,7 +195,7 @@ function Argv (args, cwd) {
     };
     
     self.showHelp = function (fn) {
-        if (!fn) fn = console.error;
+        if (!fn) fn = function(){ console.error.apply(console, arguments); };
         fn(self.help());
     };
     
