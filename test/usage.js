@@ -186,9 +186,9 @@ test('countFail', function (t) {
 test('defaultSingles', function (t) {
     var r = checkUsage(function () {
         return optimist('--foo 50 --baz 70 --powsy'.split(' '))
-            .default('foo', 5)
-            .default('bar', 6)
-            .default('baz', 7)
+            .defaults('foo', 5)
+            .defaults('bar', 6)
+            .defaults('baz', 7)
             .argv
         ;
     });
@@ -207,7 +207,7 @@ test('defaultAliases', function (t) {
     var r = checkUsage(function () {
         return optimist('')
             .alias('f', 'foo')
-            .default('f', 5)
+            .defaults('f', 5)
             .argv
         ;
     });
@@ -223,7 +223,7 @@ test('defaultAliases', function (t) {
 test('defaultHash', function (t) {
     var r = checkUsage(function () {
         return optimist('--foo 50 --baz 70'.split(' '))
-            .default({ foo : 10, bar : 20, quux : 30 })
+            .defaults({ foo : 10, bar : 20, quux : 30 })
             .argv
         ;
     });
