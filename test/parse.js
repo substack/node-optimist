@@ -185,7 +185,7 @@ test('nums', function (t) {
 });
 
 test('flag boolean', function (t) {
-    var parse = optimist([ '-t', 'moo' ]).boolean(['t']).argv;
+    var parse = optimist([ '-t', 'moo' ]).bool(['t']).argv;
     t.same(parse, { t : true, _ : [ 'moo' ], $0 : expresso });
     t.same(typeof parse.t, 'boolean');
     t.end();
@@ -193,7 +193,7 @@ test('flag boolean', function (t) {
 
 test('flag boolean value', function (t) {
     var parse = optimist(['--verbose', 'false', 'moo', '-t', 'true'])
-        .boolean(['t', 'verbose']).default('verbose', true).argv;
+        .bool(['t', 'verbose']).defaults('verbose', true).argv;
     
     t.same(parse, {
         verbose: false,
@@ -209,9 +209,9 @@ test('flag boolean value', function (t) {
 
 test('flag boolean default false', function (t) {
     var parse = optimist(['moo'])
-        .boolean(['t', 'verbose'])
-        .default('verbose', false)
-        .default('t', false).argv;
+        .bool(['t', 'verbose'])
+        .defaults('verbose', false)
+        .defaults('t', false).argv;
     
     t.same(parse, {
         verbose: false,
@@ -228,7 +228,7 @@ test('flag boolean default false', function (t) {
 
 test('boolean groups', function (t) {
     var parse = optimist([ '-x', '-z', 'one', 'two', 'three' ])
-        .boolean(['x','y','z']).argv;
+        .bool(['x','y','z']).argv;
     
     t.same(parse, {
         x : true,
@@ -350,11 +350,11 @@ test('boolean and alias with chainable api', function (t) {
         herp: { alias: 'h', boolean: true }
     };
     var aliasedArgv = optimist(aliased)
-        .boolean('herp')
+        .bool('herp')
         .alias('h', 'herp')
         .argv;
     var propertyArgv = optimist(regular)
-        .boolean('herp')
+        .bool('herp')
         .alias('h', 'herp')
         .argv;
     var expected = {
@@ -399,11 +399,11 @@ test('boolean and alias using explicit true', function (t) {
         herp: { alias: 'h', boolean: true }
     };
     var aliasedArgv = optimist(aliased)
-        .boolean('h')
+        .bool('h')
         .alias('h', 'herp')
         .argv;
     var propertyArgv = optimist(regular)
-        .boolean('h')
+        .bool('h')
         .alias('h', 'herp')
         .argv;
     var expected = {

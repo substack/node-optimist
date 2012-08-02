@@ -39,7 +39,7 @@ function Argv (args, cwd) {
     
     var flags = { bools : {}, strings : {} };
     
-    self.boolean = function (bools) {
+    self.bool = function (bools) {
         if (!Array.isArray(bools)) {
             bools = [].slice.call(arguments);
         }
@@ -129,10 +129,10 @@ function Argv (args, cwd) {
     };
     
     var defaults = {};
-    self.default = function (key, value) {
+    self.defaults = function (key, value) {
         if (typeof key === 'object') {
             Object.keys(key).forEach(function (k) {
-                self.default(k, key[k]);
+                self.defaults(k, key[k]);
             });
         }
         else {
@@ -168,12 +168,12 @@ function Argv (args, cwd) {
         else {
             if (opt.alias) self.alias(key, opt.alias);
             if (opt.demand) self.demand(key);
-            if (typeof opt.default !== 'undefined') {
-                self.default(key, opt.default);
+            if (typeof opt['default'] !== 'undefined') {
+                self.defaults(key, opt['default']);
             }
             
-            if (opt.boolean || opt.type === 'boolean') {
-                self.boolean(key);
+            if (opt['boolean'] || opt.type === 'boolean') {
+                self.bool(key);
             }
             if (opt.string || opt.type === 'string') {
                 self.string(key);
@@ -271,7 +271,6 @@ function Argv (args, cwd) {
                 defaults[key] !== undefined
                     ? '[default: ' + JSON.stringify(defaults[key]) + ']'
                     : null
-                ,
             ].filter(Boolean).join('  ');
             
             var body = [ desc, extra ].filter(Boolean).join('  ');
@@ -299,7 +298,7 @@ function Argv (args, cwd) {
     
     Object.defineProperty(self, 'argv', {
         get : parseArgs,
-        enumerable : true,
+        enumerable : true
     });
     
     function parseArgs () {
