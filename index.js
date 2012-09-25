@@ -102,6 +102,19 @@ function Argv (args, cwd) {
         return self;
     };
     
+    var implied = {};
+    self.implies = function (key, value) {
+        if (typeof key === 'object') {
+            Object.keys(key).forEach(function (k) {
+                self.implies(k, key[k]);
+            });
+        } else {
+            implied[key] = value;
+        }
+        
+        return self;
+    };
+    
     var usage;
     self.usage = function (msg, opts) {
         if (!opts && typeof msg === 'object') {
@@ -425,6 +438,31 @@ function Argv (args, cwd) {
                 fail(err)
             }
         });
+        
+        var implyFail = [];
+        Object.keys(implied).forEach(function (key) {
+            var result, value = implied[key];
+            if (value.match(/^--no-.+/)) {
+                value = value.match(/^--no-(.+)/)[1];
+                result = !argv[value];
+            } else {
+                result = argv[value];
+            }
+        
+            if (argv[key] && !result) {
+                implyFail.push(key);
+            }
+        });
+        
+        if (implyFail.length) {
+            var msg = 'Implications failed:\n';
+            
+            implyFail.forEach(function (key) {
+                msg += ('  ' + key + ' -> ' + implied[key] + '\n');
+            });
+            
+            fail(msg);
+        }
         
         return argv;
     }
