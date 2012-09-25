@@ -441,16 +441,38 @@ function Argv (args, cwd) {
         
         var implyFail = [];
         Object.keys(implied).forEach(function (key) {
-            var result, value = implied[key];
-            if (value.match(/^--no-.+/)) {
-                value = value.match(/^--no-(.+)/)[1];
-                result = !argv[value];
+            var num, origKey = key, value = implied[key];
+            
+            // convert string '1' to number 1
+            var num = Number(key);
+            key = isNaN(num) ? key : num;
+            
+            if (typeof key === 'number') {
+                // check length of argv._
+                key = argv._.length >= key;
+            } else if (key.match(/^--no-.+/)) {
+                // check if key doesn't exist
+                key = key.match(/^--no-(.+)/)[1];
+                key = !argv[key];
             } else {
-                result = argv[value];
+                // check if key exists
+                key = argv[key];
+            }
+            
+            num = Number(value);
+            value = isNaN(num) ? value : num;
+            
+            if (typeof value === 'number') {
+                value = argv._.length >= value;
+            } else if (value.match(/^--no-.+/)) {
+                value = value.match(/^--no-(.+)/)[1];
+                value = !argv[value];
+            } else {
+                value = argv[value];
             }
         
-            if (argv[key] && !result) {
-                implyFail.push(key);
+            if (key && !value) {
+                implyFail.push(origKey);
             }
         });
         
