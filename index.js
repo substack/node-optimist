@@ -1,5 +1,6 @@
 var path = require('path');
 var wordwrap = require('wordwrap');
+var fs = require('fs');
 
 /*  Hack an instance of Argv with process.argv into Argv
     so people can do
@@ -36,8 +37,20 @@ function Argv (args, cwd) {
             path.dirname(process.execPath) + '/', ''
         );
     }
-    
-    var flags = { bools : {}, strings : {} };
+
+    var flags = { bools : {}, strings : {}, configs : {} };
+
+    self.config = function(configs) {
+        if (!Array.isArray(configs)) {
+            configs = [].slice.call(arguments);
+        }
+
+        configs.forEach(function (name) {
+            flags.configs[name] = true;
+        });
+
+        return self;
+    };
     
     self.boolean = function (bools) {
         if (!Array.isArray(bools)) {
@@ -312,6 +325,18 @@ function Argv (args, cwd) {
             var num = Number(val);
             var value = typeof val !== 'string' || isNaN(num) ? val : num;
             if (flags.strings[key]) value = val;
+            else if (flags.configs[key]) {
+                value = val;
+                try {
+                    var config = JSON.parse(fs.readFileSync(val, 'utf8'));
+                    Object.keys(config).forEach(function(key) {
+                        setArg(key, config[key]);
+                    });
+                } catch(e) {
+                    console.error('Invalid JSON config file: ' + val);
+                    throw e;
+                }
+            }
             
             setKey(argv, key.split('.'), value);
             
