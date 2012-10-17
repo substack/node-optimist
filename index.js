@@ -269,7 +269,8 @@ function Argv (args, cwd) {
                     : null
                 ,
                 defaults[key] !== undefined
-                    ? '[default: ' + JSON.stringify(defaults[key]) + ']'
+                    ? '[default: ' + (typeof defaults[key] === 'string' ?
+                        JSON.stringify : String)(defaults[key]) + ']'
                     : null
                 ,
             ].filter(Boolean).join('  ');
