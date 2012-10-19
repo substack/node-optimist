@@ -178,6 +178,15 @@ function Argv (args, cwd) {
             if (opt.string || opt.type === 'string') {
                 self.string(key);
             }
+
+            if (opt.check) {
+                if (opt.check instanceof Array) {
+                    opt.check.forEach(function(check) {
+                        if (typeof check === 'function') self.check(check);
+                    });
+                }
+                else if (typeof opt.check === 'function') self.check(opt.check);
+            }
             
             var desc = opt.describe || opt.description || opt.desc;
             if (desc) {
