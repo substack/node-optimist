@@ -115,6 +115,12 @@ function Argv (args, cwd) {
         
         return self;
     };
+
+    var examples = [];
+    self.example = function (cmd, description) {
+        examples.push([cmd,description]);
+        return self;
+    };
     
     function fail (msg) {
         self.showHelp();
@@ -212,10 +218,31 @@ function Argv (args, cwd) {
         
         var help = keys.length ? [ 'Options:' ] : [];
         
+        if (examples.length) {
+            help.unshift('');
+            examples.forEach(function(example) {
+                example[0] = example[0].replace(/\$0/g, self.$0);
+            });
+
+            var commandlen = longest(examples.map(function (a) {
+                return a[0];
+            }));
+
+            var exampleLines = examples.map(function(example) {
+                var command     = example[0];
+                var description = example[1];
+                command += Array(commandlen + 5 - command.length).join(' ');
+                return '  ' + command + description;
+            });
+            exampleLines.push('');
+            help = exampleLines.concat(help);
+            help.unshift('Examples:');
+        }
+
         if (usage) {
             help.unshift(usage.replace(/\$0/g, self.$0), '');
         }
-        
+
         var switches = keys.reduce(function (acc, key) {
             acc[key] = [ key ].concat(aliases[key] || [])
                 .map(function (sw) {
