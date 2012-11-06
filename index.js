@@ -141,6 +141,8 @@ function Argv (args, cwd) {
         
         return self;
     };
+
+    self.defaults = self.default;
     
     var descriptions = {};
     self.describe = function (key, desc) {
