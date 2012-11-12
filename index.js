@@ -37,7 +37,7 @@ function Argv (args, cwd) {
         );
     }
     
-    var flags = { bools : {}, strings : {} };
+    var flags = { bools : {}, strings : {}, normalize: {} };
     
     self.boolean = function (bools) {
         if (!Array.isArray(bools)) {
@@ -58,6 +58,18 @@ function Argv (args, cwd) {
         
         strings.forEach(function (name) {
             flags.strings[name] = true;
+        });
+        
+        return self;
+    };
+    
+    self.normalize = function (strings) {
+        if (!Array.isArray(strings)) {
+            strings = [].slice.call(arguments);
+        }
+        
+        strings.forEach(function (name) {
+            flags.normalize[name] = true;
         });
         
         return self;
@@ -256,6 +268,7 @@ function Argv (args, cwd) {
             
             if (flags.bools[key]) type = '[boolean]';
             if (flags.strings[key]) type = '[string]';
+            if (flags.normalize[key]) type = '[string]';
             
             if (!wrap && dpadding.length > 0) {
                 desc += dpadding;
@@ -318,6 +331,23 @@ function Argv (args, cwd) {
             (aliases[key] || []).forEach(function (x) {
                 argv[x] = argv[key];
             });
+
+            var keys = [key].concat(aliases[key] || []);
+            for (var i = 0, l = keys.length; i < l; i++) {
+                if (flags.normalize[keys[i]]) {
+                    keys.forEach(function(key) {
+                        argv.__defineSetter__(key, function(v) {
+                            val = path.normalize(v);
+                        });
+
+                        argv.__defineGetter__(key, function() {
+                            return typeof val === 'string' ?
+                                path.normalize(val) : val;
+                        });
+                    })
+                    break;
+                }
+            }
         }
         
         for (var i = 0; i < args.length; i++) {
