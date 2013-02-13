@@ -8,6 +8,7 @@ and -whistlz of program usage but think optstrings are a waste of time.
 With optimist, option parsing doesn't have to suck (as much).
 
 [![build status](https://secure.travis-ci.org/substack/node-optimist.png)](http://travis-ci.org/substack/node-optimist)
+[![Dependency Status](https://gemnasium.com/substack/node-optimist.png)](https://gemnasium.com/substack/node-optimist)
 
 examples
 ========
