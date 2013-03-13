@@ -85,18 +85,19 @@ function Argv (args, cwd) {
     };
     
     var demanded = {};
-    self.demand = function (keys) {
+    self.demand = function (keys, msg) {
         if (typeof keys == 'number') {
-            if (!demanded._) demanded._ = 0;
-            demanded._ += keys;
+            if (!demanded._) demanded._ = { count: 0, msg: null };
+            demanded._.count += keys;
+            demanded._.msg = msg;
         }
         else if (Array.isArray(keys)) {
             keys.forEach(function (key) {
-                self.demand(key);
+                self.demand(key, msg);
             });
         }
         else {
-            demanded[keys] = true;
+            demanded[keys] = { msg: msg };
         }
         
         return self;
@@ -167,7 +168,7 @@ function Argv (args, cwd) {
         }
         else {
             if (opt.alias) self.alias(key, opt.alias);
-            if (opt.demand) self.demand(key);
+            if (opt.demand) self.demand(key, opt.demand);
             if (typeof opt.default !== 'undefined') {
                 self.default(key, opt.default);
             }
@@ -293,7 +294,7 @@ function Argv (args, cwd) {
             help.push(prelude + body);
         });
         
-        help.push('');
+        if (keys.length) help.push('');
         return help.join('\n');
     };
     
@@ -400,19 +401,35 @@ function Argv (args, cwd) {
             }
         });
         
-        if (demanded._ && argv._.length < demanded._) {
-            fail('Not enough non-option arguments: got '
-                + argv._.length + ', need at least ' + demanded._
-            );
+        if (demanded._ && argv._.length < demanded._.count) {
+            if (demanded._.msg) {
+                fail(demanded._.msg);
+            } else {
+                fail('Not enough non-option arguments: got '
+                    + argv._.length + ', need at least ' + demanded._.count
+                );
+            }
         }
         
-        var missing = [];
+        var missing = null;
         Object.keys(demanded).forEach(function (key) {
-            if (!argv[key]) missing.push(key);
+            if (!argv[key]) {
+                missing = missing || {};
+                missing[key] = demanded[key];
+            }
         });
         
-        if (missing.length) {
-            fail('Missing required arguments: ' + missing.join(', '));
+        if (missing) {
+            var customMsgs = [];
+            Object.keys(missing).forEach(function(key) {
+                var msg = missing[key].msg;
+                if (msg && customMsgs.indexOf(msg) < 0) {
+                    customMsgs.push(msg);
+                }
+            });
+            var customMsg = customMsgs.length ? '\n' + customMsgs.join('\n') : '';
+
+            fail('Missing required arguments: ' + Object.keys(missing).join(', ') + customMsg);
         }
         
         checks.forEach(function (f) {

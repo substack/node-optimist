@@ -29,6 +29,33 @@ test('usageFail', function (t) {
     t.end();
 });
 
+test('usageFailWithMessage', function (t) {
+    var r = checkUsage(function () {
+        return optimist('-z 20'.split(' '))
+            .usage('Usage: $0 -x NUM -y NUM')
+            .demand(['x','y'], 'x and y are both required to multiply all the things')
+            .argv;
+    });
+    t.same(
+        r.result,
+        { z : 20, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage -x NUM -y NUM',
+            'Options:',
+            '  -x  [required]',
+            '  -y  [required]',
+            'Missing required arguments: x, y',
+            'x and y are both required to multiply all the things',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
 
 test('usagePass', function (t) {
     var r = checkUsage(function () {
@@ -175,6 +202,31 @@ test('countFail', function (t) {
         [
             'Usage: ./usage [x] [y] [z] {OPTIONS}',
             'Not enough non-option arguments: got 2, need at least 3',
+        ]
+    );
+
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('countFailWithMessage', function (t) {
+    var r = checkUsage(function () {
+        return optimist('src --moo'.split(' '))
+            .usage('Usage: $0 [x] [y] [z] {OPTIONS} <src> <dest> [extra_files...]')
+            .demand(2, 'src and dest files are both required')
+            .argv;
+    });
+    t.same(
+        r.result,
+        { _ : [ 'src' ], moo : true, $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage [x] [y] [z] {OPTIONS} <src> <dest> [extra_files...]',
+            'src and dest files are both required',
         ]
     );
 
