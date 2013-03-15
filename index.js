@@ -319,6 +319,17 @@ function Argv (args, cwd) {
                 argv[x] = argv[key];
             });
         }
+
+        // If user passed in a simple string, parse it into an array as process.argv would.
+        if (typeof args == 'string' || args instanceof String) {
+            function parseString(str) {
+                var re = /(?:")([^"]+)(?:")|([^\s"]+)(?=\s+|$)/g;
+                var res=[], arr=null;
+                while (arr = re.exec(str)) { res.push(arr[1] ? arr[1] : arr[0]); }
+                return res;
+            }
+            args = parseString(args);
+        }
         
         for (var i = 0; i < args.length; i++) {
             var arg = args[i];

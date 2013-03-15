@@ -128,7 +128,23 @@ test('multi', function (t) {
     );
     t.end();
 });
- 
+
+test('parse string instead of array', function (t) {
+    t.same(
+        optimist.parse('-abc --verbose -m "test message" hey there!'),
+        {
+            a: true,
+            b: true,
+            c: true,
+            verbose: true,
+            m: 'test message',
+            _: ['hey', 'there!'],
+            $0: $0
+        }
+    );
+    t.end();
+});
+
 test('comprehensive', function (t) {
     t.same(
         optimist.parse([
