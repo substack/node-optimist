@@ -137,7 +137,7 @@ test('parse string instead of array', function (t) {
             b: true,
             c: true,
             verbose: true,
-            m: 'text message',
+            m: 'test message',
             _: ['hey', 'there!'],
             $0: $0
         }
