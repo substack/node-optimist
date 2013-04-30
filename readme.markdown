@@ -106,7 +106,7 @@ console.log(argv._);
     (0.54,1.12)
     [ 'foo', 'bar', 'baz' ]
 
-Order now, and Optimist as a special bonus Optimist will count options
+Order now, and as a special bonus Optimist will count boolean options!
 ----------------------------------------------------------------------
 
 count.js
