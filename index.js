@@ -37,7 +37,7 @@ function Argv (args, cwd) {
         );
     }
     
-    var flags = { bools : {}, strings : {} };
+    var flags = { bools : {}, strings : {}, counts: {} };
     
     self.boolean = function (bools) {
         if (!Array.isArray(bools)) {
@@ -62,7 +62,20 @@ function Argv (args, cwd) {
         
         return self;
     };
-    
+
+    self.count = function(counts) {
+        if (!Array.isArray(counts)) {
+            counts = [].slice.call(arguments);
+        }
+        
+        counts.forEach(function (name) {
+            flags.counts[name] = true;
+        });
+        
+        return self;
+    };
+
+
     var aliases = {};
     self.alias = function (x, y) {
         if (typeof x === 'object') {
@@ -177,6 +190,9 @@ function Argv (args, cwd) {
             }
             if (opt.string || opt.type === 'string') {
                 self.string(key);
+            }
+            if (opt.count || opt.type === 'count') {
+                self.count(key);
             }
             
             var desc = opt.describe || opt.description || opt.desc;
@@ -301,20 +317,26 @@ function Argv (args, cwd) {
         get : parseArgs,
         enumerable : true,
     });
-    
+
     function parseArgs () {
         var argv = { _ : [], $0 : self.$0 };
         Object.keys(flags.bools).forEach(function (key) {
             setArg(key, defaults[key] || false);
         });
-        
+        Object.keys(flags.counts).forEach(function (key) {
+            setArg(key, defaults[key]);
+        });
+
         function setArg (key, val) {
             var num = Number(val);
             var value = typeof val !== 'string' || isNaN(num) ? val : num;
             if (flags.strings[key]) value = val;
-            
+            if (flags.counts[key] || flags.counts[aliases[key]]) {
+              value = function(orig) { return orig !== undefined ? orig+1 : 0; };
+            }
+
             setKey(argv, key.split('.'), value);
-            
+
             (aliases[key] || []).forEach(function (x) {
                 argv[x] = argv[key];
             });
@@ -471,9 +493,12 @@ function setKey (obj, keys, value) {
         if (o[key] === undefined) o[key] = {};
         o = o[key];
     });
-    
+
     var key = keys[keys.length - 1];
-    if (o[key] === undefined || typeof o[key] === 'boolean') {
+    if (typeof value === 'function') {
+        o[key] = value(o[key]);
+    }
+    else if (o[key] === undefined || typeof o[key] === 'boolean') {
         o[key] = value;
     }
     else if (Array.isArray(o[key])) {
