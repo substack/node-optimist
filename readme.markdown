@@ -135,16 +135,16 @@ DEBUG("Extra chatty mode");
 
     $ node count.js -v
     Showing only important stuff
-    Showing semi-mportant stuff too
+    Showing semi-important stuff too
 
     $ node count.js -vv
     Showing only important stuff
-    Showing semi-mportant stuff too
+    Showing semi-important stuff too
     Extra chatty mode
 
     $ node count.js -v --verbose
     Showing only important stuff
-    Showing semi-mportant stuff too
+    Showing semi-important stuff too
     Extra chatty mode
 
 Plus, Optimist comes with .usage() and .demand()!
