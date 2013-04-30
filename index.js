@@ -427,7 +427,7 @@ function Argv (args, cwd) {
         
         checks.forEach(function (f) {
             try {
-                if (f(argv) === false) {
+                if (f(argv, aliases) === false) {
                     fail('Argument check failed: ' + f.toString());
                 }
             }
