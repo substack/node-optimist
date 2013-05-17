@@ -62,6 +62,12 @@ function Argv (args, cwd) {
         
         return self;
     };
+
+    var posix = false;
+    self.posix = function () {
+      posix = true
+      return self;
+    };
     
     var aliases = {};
     self.alias = function (x, y) {
@@ -394,6 +400,10 @@ function Argv (args, cwd) {
                         setArg(key, true);
                     }
                 }
+            }
+            else if (posix) {
+              argv._.push.apply(argv._, args.slice(i));
+              break;
             }
             else {
                 var n = Number(arg);
