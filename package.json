@@ -4,6 +4,7 @@
     "description" : "Light-weight option parsing with an argv hash. No optstrings attached.",
     "main" : "./index.js",
     "dependencies" : {
+        "pathnorm" : "~0.0.2",
         "wordwrap" : "~0.0.2",
         "minimist" : "~0.0.1"
     },
