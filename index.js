@@ -1,4 +1,5 @@
 var path = require('path');
+var pathnorm = require('pathnorm');
 var minimist = require('minimist');
 var wordwrap = require('wordwrap');
 
@@ -26,7 +27,7 @@ function Argv (processArgs, cwd) {
         .slice(0,2)
         .map(function (x) {
             var b = rebase(cwd, x);
-            return x.match(/^\//) && b.length < x.length
+            return x.match(/^(\/|[a-z]:\\)/i) && b.length < x.length
                 ? b : x
         })
         .join(' ')
@@ -330,9 +331,9 @@ function Argv (processArgs, cwd) {
 // exported for tests
 exports.rebase = rebase;
 function rebase (base, dir) {
-    var ds = path.normalize(dir).split('/').slice(1);
-    var bs = path.normalize(base).split('/').slice(1);
-    
+    var ds = pathnorm.normalize(dir).split('/').slice(1);
+    var bs = pathnorm.normalize(base).split('/').slice(1);
+        
     for (var i = 0; ds[i] && ds[i] == bs[i]; i++);
     ds.splice(0, i); bs.splice(0, i);
     
