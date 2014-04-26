@@ -495,6 +495,7 @@ installation
 ============
 
 With [npm](http://github.com/isaacs/npm), just do:
+
     npm install optimist
  
 or clone this project on github:
