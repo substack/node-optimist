@@ -97,8 +97,8 @@ console.log(
     $ ./bool.js -sp --fr
     Le chat dit: miaou.
 
-And non-hypenated options too! Just use `argv._`!
--------------------------------------------------
+And non-hyphenated options too! Just use `argv._`!
+--------------------------------------------------
  
 nonopt.js:
 
