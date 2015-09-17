@@ -295,7 +295,7 @@ function Argv (processArgs, cwd) {
         
         var missing = [];
         Object.keys(demanded).forEach(function (key) {
-            if (!argv[key]) missing.push(key);
+            if (typeof argv[key] === 'undefined' || argv[key] === null) missing.push(key);
         });
         
         if (missing.length) {
