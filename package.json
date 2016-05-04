@@ -3,6 +3,9 @@
     "version" : "0.6.1",
     "description" : "Light-weight option parsing with an argv hash. No optstrings attached.",
     "main" : "./index.js",
+    "files": [
+        "index.js"
+    ],
     "dependencies" : {
         "wordwrap" : "~0.0.2",
         "minimist" : "~0.0.1"
