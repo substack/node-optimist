@@ -9,8 +9,6 @@ successor to optimist.
 
 [![yarrrrrrrgs!](http://i.imgur.com/4WFGVJ9.png)](https://github.com/chevex/yargs)
 
-You should also consider [nomnom](https://github.com/harthur/nomnom).
-
 optimist
 ========
 
@@ -46,7 +44,7 @@ else {
 
     $ ./xup.js --rif=55 --xup=9.52
     Buy more riffiwobbles
-    
+
     $ ./xup.js --rif 12 --xup 8.1
     Sell the xupptumblers
 
@@ -54,7 +52,7 @@ else {
 
 But wait! There's more! You can do short options:
 -------------------------------------------------
- 
+
 short.js:
 
 ````javascript
@@ -90,7 +88,7 @@ console.log(
 
     $ ./bool.js -s
     The cat says: meow
-    
+
     $ ./bool.js -sp
     The cat says: meow.
 
@@ -99,7 +97,7 @@ console.log(
 
 And non-hypenated options too! Just use `argv._`!
 -------------------------------------------------
- 
+
 nonopt.js:
 
 ````javascript
@@ -114,7 +112,7 @@ console.log(argv._);
     $ ./nonopt.js -x 6.82 -y 3.35 moo
     (6.82,3.35)
     [ 'moo' ]
-    
+
     $ ./nonopt.js foo -x 0.54 bar -y 1.12 baz
     (0.54,1.12)
     [ 'foo', 'bar', 'baz' ]
@@ -135,10 +133,10 @@ console.log(argv.x / argv.y);
 ````
 
 ***
- 
+
     $ ./divide.js -x 55 -y 11
     5
-    
+
     $ node ./divide.js -x 4.91 -z 2.51
     Usage: node ./divide.js -x [num] -y [num]
 
@@ -264,10 +262,10 @@ s.on('end', function () {
 
     Missing required arguments: f
 
-    $ node line_count.js --file line_count.js 
+    $ node line_count.js --file line_count.js
     20
-    
-    $ node line_count.js -f line_count.js 
+
+    $ node line_count.js -f line_count.js
     20
 
 methods
@@ -496,14 +494,14 @@ installation
 
 With [npm](http://github.com/isaacs/npm), just do:
     npm install optimist
- 
+
 or clone this project on github:
 
     git clone http://github.com/substack/node-optimist.git
 
 To run the tests with [expresso](http://github.com/visionmedia/expresso),
 just do:
-    
+
     expresso
 
 inspired By
