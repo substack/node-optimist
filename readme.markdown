@@ -201,8 +201,10 @@ console.dir(argv);
 ***
 
     $ ./boolean_single.js -v foo bar baz
-    true
-    [ 'bar', 'baz', 'foo' ]
+    { _: [ 'bar', 'baz', 'foo' ],
+      '$0': 'node ./boolean_single.fs',
+      v: true }
+    
 
 boolean_double.js
 
