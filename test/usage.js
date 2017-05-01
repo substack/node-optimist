@@ -254,6 +254,39 @@ test('rebase', function (t) {
     t.end();
 });
 
+test('protect', function (t) {
+    var argv = optimist('-u user -p'.split(' '))
+        .protect('p')
+        .argv;
+
+    // If our test fails to read from stdin, we should
+    // have a timeout set so that the test doesn't hang
+    var timeout = setTimeout(function() {
+        // Clean up stdin listeners
+        var tty = require('tty');
+        process.stdin.removeAllListeners('keypress');
+        tty.setRawMode(false);
+        process.stdin.pause();
+        t.notOk(true, 'reading from stdin timed out');
+        t.end();
+    }, 3000);
+
+    argv._io.on('input', function(argv) {
+        clearTimeout(timeout);
+        t.equal('secret', argv.p);
+        t.end();
+    });
+
+    // Fake stdin
+    process.stdin.emit('keypress', 's', {});
+    process.stdin.emit('keypress', 'e', {});
+    process.stdin.emit('keypress', 'c', {});
+    process.stdin.emit('keypress', 'r', {});
+    process.stdin.emit('keypress', 'e', {});
+    process.stdin.emit('keypress', 't', {});
+    process.stdin.emit('keypress', '', {name: 'enter'});
+});
+
 function checkUsage (f) {
 
     var exit = false;

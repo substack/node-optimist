@@ -1,6 +1,8 @@
 var path = require('path');
 var minimist = require('minimist');
 var wordwrap = require('wordwrap');
+var tty = require('tty');
+var events = require('events');
 
 /*  Hack an instance of Argv with process.argv into Argv
     so people can do
@@ -133,6 +135,15 @@ function Argv (processArgs, cwd) {
         else {
             descriptions[key] = desc;
         }
+        return self;
+    };
+    
+    var protecting = false;
+    self.protect = function (key, prompt) {
+        protecting = {
+            name: key,
+            prompt: prompt || false
+        };
         return self;
     };
     
@@ -312,6 +323,29 @@ function Argv (processArgs, cwd) {
                 fail(err)
             }
         });
+
+        if (protecting) {
+            argv._io = new events.EventEmitter();
+            if (argv[protecting.name]) {
+                var buffer = '';
+
+                console.log(protecting.prompt || '');
+                process.stdin.resume();
+                tty.setRawMode(true);
+
+                process.stdin.on('keypress', function(chr, key){
+                    if (key && 'enter' === key.name) {
+                        process.stdin.removeAllListeners('keypress');
+                        tty.setRawMode(false);
+                        process.stdin.pause();
+                        argv[protecting.name] = buffer;
+                        argv._io.emit('input', argv, protecting.name);
+                        return;
+                    }
+                    buffer += chr;
+                });
+            }
+        }
         
         return argv;
     }
