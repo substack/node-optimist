@@ -32,7 +32,7 @@
         "email" : "mail@substack.net",
         "url" : "http://substack.net"
     },
-    "license" : "MIT/X11",
+    "license" : "(MIT OR X11)",
     "engine" : {
         "node" : ">=0.4"
     }
