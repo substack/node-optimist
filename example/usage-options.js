@@ -7,7 +7,7 @@ var argv = optimist.usage('This is my awesome program', {
     short: 'a',
   },
   'info': {
-    description: 'Provide some information about the node.js agains!!!!!!',
+    description: 'Provide some information about the node.js against!!!!!!',
     boolean: true,
     short: 'i'
   }
