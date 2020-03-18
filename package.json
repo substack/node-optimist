@@ -4,12 +4,12 @@
     "description" : "Light-weight option parsing with an argv hash. No optstrings attached.",
     "main" : "./index.js",
     "dependencies" : {
-        "wordwrap" : "^0.0.2",
-        "minimist" : "^0.0.1"
+        "wordwrap" : "0.x",
+        "minimist" : "0.x"
     },
     "devDependencies" : {
-        "hashish": "^0.0.4",
-        "tap" : "^0.4.0"
+        "hashish": "0.x",
+        "tap" : "0.x"
     },
     "scripts" : {
         "test" : "tap ./test/*.js"
