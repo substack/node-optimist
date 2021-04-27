@@ -5,7 +5,7 @@
     "main" : "./index.js",
     "dependencies" : {
         "wordwrap" : "~0.0.2",
-        "minimist" : "~0.0.1"
+        "minimist" : "~1.2.5"
     },
     "devDependencies" : {
         "hashish": "~0.0.4",
